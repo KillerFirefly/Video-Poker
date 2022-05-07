@@ -8,33 +8,23 @@ namespace VideoPoker {
 	/// 
 	public class UIManager : MonoBehaviour {
 		[SerializeField] private GameManager gameManager = null;
-
 		[SerializeField] private Text currentBalanceText = null;
-
 		[SerializeField] private Text currentBetText = null;
-
 		[SerializeField] private Text winningText = null;
-
 		[SerializeField] private Button betButton = null;
-		[SerializeField] private Button dealButton = null;
-
-		[SerializeField] private Image[] cards;
+		[SerializeField] private Button maxBetButton = null;
 
 		//-//////////////////////////////////////////////////////////////////////
 		/// 
 		void Awake() {
-			if (gameManager == null) {
-				gameManager = FindObjectOfType<GameManager>();
-			}
 		}
 
 		//-//////////////////////////////////////////////////////////////////////
 		/// 
 		void Start() {
 			betButton.onClick.AddListener(OnBetButtonPressed);
+			maxBetButton.onClick.AddListener(OnMaxBetButtonPressed);
 			RefreshBalanceText();
-
-			dealButton.onClick.AddListener(OnDealButtonPressed);
 		}
 
 		//-//////////////////////////////////////////////////////////////////////
@@ -42,22 +32,20 @@ namespace VideoPoker {
 		/// Event that triggers when bet button is pressed
 		/// 
 		private void OnBetButtonPressed() {
-			GameManager.IncrementBet();
+			gameManager.IncrementBet();
 			RefreshBalanceText();
 			RefreshBetText();
 		}
-		private void RefreshBetText() {
-			currentBetText.text = $"Bet: {GameManager.CurrentBet}";
+		private void OnMaxBetButtonPressed() {
+			gameManager.MaxBet();
+			RefreshBalanceText();
+			RefreshBetText();
 		}
-		private void RefreshBalanceText() {
-			currentBalanceText.text = $"Balance: {GameManager.CurrentBalance} Credits";
+		public void RefreshBetText() {
+			currentBetText.text = $"Bet: {gameManager.currentBet}";
 		}
-
-		private void OnDealButtonPressed() {
-			Debug.Log("Deal");
-			foreach (var card in cards) {
-				card.sprite = gameManager.DrawCard();
-			}
+		public void RefreshBalanceText() {
+			currentBalanceText.text = $"Balance: {gameManager.currentBalance} Credits";
 		}
 	}
 }
