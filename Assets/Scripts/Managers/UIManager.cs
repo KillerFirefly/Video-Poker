@@ -14,13 +14,6 @@ namespace VideoPoker {
 		[SerializeField] private Button betButton = null;
 		[SerializeField] private Button maxBetButton = null;
 
-		//-//////////////////////////////////////////////////////////////////////
-		/// 
-		void Awake() {
-		}
-
-		//-//////////////////////////////////////////////////////////////////////
-		/// 
 		void Start() {
 			betButton.onClick.AddListener(OnBetButtonPressed);
 			maxBetButton.onClick.AddListener(OnMaxBetButtonPressed);
@@ -46,6 +39,17 @@ namespace VideoPoker {
 		}
 		public void RefreshBalanceText() {
 			currentBalanceText.text = $"Balance: {gameManager.currentBalance} Credits";
+		}
+
+		/// <summary>Message to be displayed with a win.</summary>
+		/// <param name="type">Name of hand/win</param>
+		/// <param name="credits">The amount that was won</param>
+		public void PrintWinMessage(string type, string credits) {
+			if (string.IsNullOrEmpty(type)) {
+				winningText.text = "";
+			} else {
+				winningText.text = $"{type}! You won {credits} credits.";
+			}
 		}
 	}
 }

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+//using System.Text.RegularExpressions;
 
 namespace VideoPoker {
 	//-//////////////////////////////////////////////////////////////////////
@@ -17,13 +18,11 @@ namespace VideoPoker {
 		[SerializeField] private Button drawButton = null;
 		[SerializeField] private Button betButton = null;
 		[SerializeField] private Button betMaxButton = null;
-		[SerializeField] private Card[] cards;
+		[SerializeField] private Card[] hand;
 
 		[SerializeField] private Deck deckStyle;
 		[SerializeField] private List<Sprite> currentDeck;
 
-		//-//////////////////////////////////////////////////////////////////////
-		/// 
 		void Awake() {
 			if (uiManager == null) {
 				uiManager = FindObjectOfType<UIManager>();
@@ -42,6 +41,7 @@ namespace VideoPoker {
 			ClearHolds();
 			currentBet = 0;
 			uiManager.RefreshBetText();
+			uiManager.RefreshBalanceText();
 
 			SetCardsInteractable(false);
 		}
@@ -57,26 +57,19 @@ namespace VideoPoker {
 			currentDeck = new List<Sprite>(deckStyle.cards);
 		}
 		private void ClearHolds() {
-			foreach (var card in cards) {
+			foreach (var card in hand) {
 				card.SetHold(false);
 			}
 		}
 		private void SetCardsInteractable(bool value) {
-			foreach (var card in cards) {
-				card.GetComponent<Button>().interactable = value;
+			foreach (var card in hand) {
+				card.button.interactable = value;
 			}
 		}
 
-		//-//////////////////////////////////////////////////////////////////////
-		/// 
 		void Start() {
 			dealButton.onClick.AddListener(OnDealButtonPressed);
 			drawButton.onClick.AddListener(OnDrawButtonPressed);
-		}
-
-		//-//////////////////////////////////////////////////////////////////////
-		/// 
-		void Update() {
 		}
 
 		public Sprite DrawCard() {
@@ -111,7 +104,7 @@ namespace VideoPoker {
 			drawButton.gameObject.SetActive(true);
 			betButton.interactable = false;
 			betMaxButton.interactable = false;
-			foreach (var card in cards) {
+			foreach (var card in hand) {
 				if (!card.hold) {
 					card.cardImage.sprite = DrawCard();
 				}
@@ -120,7 +113,7 @@ namespace VideoPoker {
 			SetCardsInteractable(true);
 		}
 		private void OnDrawButtonPressed() {
-			foreach (var card in cards) {
+			foreach (var card in hand) {
 				if (!card.hold) {
 					card.cardImage.sprite = DrawCard();
 				}
@@ -137,7 +130,99 @@ namespace VideoPoker {
 		}
 
 		private void EvaluateHand() {
+			List<string> cards = new List<string>();
+			foreach (var card in hand) {
+				//Regex cardName = new Regex("[^_]*$");
+				//Regex cardDigit = new Regex("\d{2}");
+				string cardName = card.cardImage.sprite.name;
+				cards.Add(cardName.Substring(cardName.Length - 3));
+			}
 
+			int prize = 0;
+			string winType = "";
+
+			if (RoyalFlush(cards)) { prize = 800; winType = "Royal Flush!!"; } 
+			else if (StraightFlush(cards)) { prize = 50; winType = "Straight Flush!"; }
+			else if (FourOfAKind(cards)) { prize = 25; winType = "Four of a kind";}
+			else if (FullHouse(cards)) { prize = 9; winType = "Full House";}
+			else if (Flush(cards)) { prize = 6; winType = "Flush";}
+			else if (Straight(cards)) { prize = 4; winType = "Straight";}
+			else if (ThreeOfAKind(cards)) { prize = 3; winType = "Three of a kind";}
+			else if (TwoPair(cards)) { prize = 2; winType = "Two Pair";}
+			else if (JacksOrBetter(cards)) { prize = 1; winType = "Jacks or Better"; }
+
+			//Print win message
+			int winAmount = currentBet * prize;
+			uiManager.PrintWinMessage(winType, winAmount.ToString());
+
+			currentBalance += winAmount;
+		}
+
+		private bool RoyalFlush(List<string> cards) {
+			
+			
+			return false;
+		}
+
+		private bool StraightFlush(List<string> cards) {
+			
+			
+			return false;
+		}
+
+		private bool FourOfAKind(List<string> cards) {
+			
+			
+			return false;
+		}
+
+		private bool FullHouse(List<string> cards) {
+			
+			
+			return false;
+		}
+
+		private bool Flush(List<string> cards) {
+			
+			
+			return false;
+		}
+
+		private bool Straight(List<string> cards) {
+			
+			
+			return false;
+		}
+
+		private bool ThreeOfAKind(List<string> cards) {
+			
+			
+			return false;
+		}
+
+		private bool TwoPair(List<string> cards) {
+			
+			
+			return false;
+		}
+
+		private bool JacksOrBetter(List<string> cards) {
+			//if contains pair of 11 or higher?
+			int jacks = 0;
+			int queens = 0;
+			int kings = 0;
+			foreach (var card in cards) {
+				int digit = int.Parse(card.Substring(card.Length - 2));
+				if (digit == 11) jacks++;
+				else if (digit == 12) queens++;
+				else if (digit == 13) kings++;
+			}
+
+			if (jacks == 2 || queens == 2 || kings == 2) {
+				return true;
+			} else {
+				return false;
+			}
 		}
 	}
 }

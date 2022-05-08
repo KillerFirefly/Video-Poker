@@ -116,6 +116,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a790fceec22b31e43a061d6b5018ba32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  button: {fileID: 4677759296469084339}
   cardImage: {fileID: 4677759297067671056}
   holdText: {fileID: 4677759297069796229}
   hold: 0

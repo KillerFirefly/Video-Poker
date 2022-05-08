@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class Card : MonoBehaviour {
 
+	public Button button;
 	public Image cardImage;
 	public GameObject holdText;
 	public bool hold = false;

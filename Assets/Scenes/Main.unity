@@ -167,13 +167,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uiManager: {fileID: 915999043}
-  currentBalance: 3
+  currentBalance: 50
   currentBet: 0
   dealButton: {fileID: 290075447}
   drawButton: {fileID: 2019596990}
   betButton: {fileID: 846343465}
   betMaxButton: {fileID: 1863661829}
-  cards:
+  hand:
   - {fileID: 318244868}
   - {fileID: 436524148}
   - {fileID: 811967490}
@@ -1140,7 +1140,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Jacks or Better! You won X credits.
+  m_Text: 
 --- !u!222 &896960750
 CanvasRenderer:
   m_ObjectHideFlags: 0
