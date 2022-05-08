@@ -171,9 +171,7 @@ namespace VideoPoker {
 		}
 
 		private bool StraightFlush(List<string> cards) {
-			
-			
-			return false;
+			return Straight(cards) && Flush(cards);
 		}
 
 		private bool FourOfAKind(List<string> cards) {
@@ -222,8 +220,19 @@ namespace VideoPoker {
 
 			List<int> digits = ExtractDigits(cards);
 
-			//sort digits?
-			//incrementing by one?
+			digits.Sort();
+			//Check incrementing by one
+			for (int i = 1; i < digits.Count; i++) {
+				if (digits[i] == digits[i-1] + 1) {
+					straight = true;
+				} else {
+					straight = false;
+					break;
+				}
+			}
+			//if (digits[1] == digits[0] + 1 && digits[2] == digits[1] + 1 && digits[3] == digits[2] + 1 && digits[4] == digits[3] + 1) {
+			//	straight = true;
+			//}
 
 			return straight;
 		}
