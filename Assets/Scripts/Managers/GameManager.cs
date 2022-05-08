@@ -205,8 +205,17 @@ namespace VideoPoker {
 		}
 
 		private bool FullHouse(List<string> cards) {
-			
-			
+			List<int> digits = ExtractDigits(cards);
+
+			digits.Sort();
+			if (digits[0] == digits[1] && digits[1] == digits[2]
+				&& digits[3] == digits[4]) {
+				return true;
+			} else if (digits[0] == digits[1] 
+				&& digits[2] == digits[3] && digits[3] == digits[4]) {
+				return true;
+			}
+
 			return false;
 		}
 
@@ -322,6 +331,8 @@ namespace VideoPoker {
 			return digits;
 		}
 
+		/// <summary>Remove the digits from the name of cards.</summary>
+		/// <returns>Char List.</returns>
 		private List<char> ExtractSuits(List<string> cards) {
 			List<char> suits = new List<char>();
 			foreach (var card in cards) {
