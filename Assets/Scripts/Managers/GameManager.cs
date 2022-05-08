@@ -179,12 +179,7 @@ namespace VideoPoker {
 		private bool FourOfAKind(List<string> cards) {
 			bool four = false;
 
-			//Load digits list from card names
-			List<int> digits = new List<int>();
-			foreach (var card in cards) {
-				int digit = int.Parse(card.Substring(card.Length - 2));
-				digits.Add(digit);
-			}
+			List<int> digits = ExtractDigits(cards);
 
 			for (int first = 0; first < digits.Count; first++) {
 				for (int second = 0; second < digits.Count; second++) {
@@ -211,26 +206,32 @@ namespace VideoPoker {
 		}
 
 		private bool Flush(List<string> cards) {
-			
-			
-			return false;
+			bool flush = false;
+
+			List<char> suits = ExtractSuits(cards);
+
+			if (suits[0] == suits[1] && suits[1] == suits[2] && suits[2] == suits[3] && suits[3] == suits[4]) {
+				flush = true;
+			}
+
+			return flush;
 		}
 
 		private bool Straight(List<string> cards) {
-			
-			
-			return false;
+			bool straight = false;
+
+			List<int> digits = ExtractDigits(cards);
+
+			//sort digits?
+			//incrementing by one?
+
+			return straight;
 		}
 
 		private bool ThreeOfAKind(List<string> cards) {
 			bool triple = false;
 
-			//Load digits list from card names
-			List<int> digits = new List<int>();
-			foreach (var card in cards) {
-				int digit = int.Parse(card.Substring(card.Length - 2));
-				digits.Add(digit);
-			}
+			List<int> digits = ExtractDigits(cards);
 
 			for (int first = 0; first < digits.Count; first++) {
 				for (int second = 0; second < digits.Count; second++) {
@@ -251,12 +252,7 @@ namespace VideoPoker {
 		private bool TwoPair(List<string> cards) {
 			int pairCount = 0;
 
-			//Load digits from card names
-			List<int> digits = new List<int>();
-			foreach (var card in cards) {
-				int digit = int.Parse(card.Substring(card.Length - 2));
-				digits.Add(digit);
-			}
+			List<int> digits = ExtractDigits(cards);
 
 			//Find pairs
 			for (int first = 0; first < digits.Count; first++) {
@@ -294,6 +290,29 @@ namespace VideoPoker {
 			} else {
 				return false;
 			}
+		}
+
+
+		/// <summary>Remove the suite from the name of cards.</summary>
+		/// <returns>Int List of parsed digits.</returns>
+		private static List<int> ExtractDigits(List<string> cards) {
+			//Load digits list from card names
+			List<int> digits = new List<int>();
+			foreach (var card in cards) {
+				int digit = int.Parse(card.Substring(card.Length - 2));
+				digits.Add(digit);
+			}
+
+			return digits;
+		}
+
+		private List<char> ExtractSuits(List<string> cards) {
+			List<char> suits = new List<char>();
+			foreach (var card in cards) {
+				char suit = card.ToCharArray()[0];
+				suits.Add(suit);
+			}
+			return suits;
 		}
 	}
 }
