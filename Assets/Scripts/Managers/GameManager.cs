@@ -165,7 +165,14 @@ namespace VideoPoker {
 		}
 
 		private bool RoyalFlush(List<string> cards) {
-			
+			if (Flush(cards)) {
+				List<int> digits = ExtractDigits(cards);
+
+				digits.Sort();
+				if (digits[0] == 1 && digits[1] == 10 && digits[2] == 11 && digits[3] == 12 && digits[4] == 13) {
+					return true;
+				}
+			}
 			
 			return false;
 		}
