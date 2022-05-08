@@ -53,9 +53,13 @@ namespace VideoPoker {
 			betMaxButton.interactable = false;
 			SetCardsInteractable(false);
 		}
+
+		/// <summary>Refresh the current play deck from the deck style.</summary>
 		private void NewDeck() {
 			currentDeck = new List<Sprite>(deckStyle.cards);
 		}
+
+		/// <summary>Unhold all held cards.</summary>
 		private void ClearHolds() {
 			foreach (var card in hand) {
 				card.SetHold(false);
@@ -72,6 +76,7 @@ namespace VideoPoker {
 			drawButton.onClick.AddListener(OnDrawButtonPressed);
 		}
 
+		/// <summary>Draw a random card from the deck.</summary>
 		public Sprite DrawCard() {
 			int randomCardIndex = Random.Range(0, currentDeck.Count);
 			Sprite card = currentDeck[randomCardIndex];
@@ -130,6 +135,7 @@ namespace VideoPoker {
 		}
 
 		private void EvaluateHand() {
+			//Get the name from the card sprite
 			List<string> cards = new List<string>();
 			foreach (var card in hand) {
 				//Regex cardName = new Regex("[^_]*$");
@@ -171,9 +177,31 @@ namespace VideoPoker {
 		}
 
 		private bool FourOfAKind(List<string> cards) {
-			
-			
-			return false;
+			bool four = false;
+
+			//Load digits list from card names
+			List<int> digits = new List<int>();
+			foreach (var card in cards) {
+				int digit = int.Parse(card.Substring(card.Length - 2));
+				digits.Add(digit);
+			}
+
+			for (int first = 0; first < digits.Count; first++) {
+				for (int second = 0; second < digits.Count; second++) {
+					for (int third = 0; third < digits.Count; third++) {
+						for (int fourth = 0; fourth < digits.Count; fourth++) {
+							//Make sure we're not comparing a card with itself
+							if (first != second && first != third && first != fourth && second != third && second != fourth && third != fourth) {
+								if (digits[first] == digits[second] && digits[second] == digits[third] && digits[third] == digits[fourth]) {
+									four = true;
+								}
+							}
+						}
+					}
+				}
+			}
+
+			return four;
 		}
 
 		private bool FullHouse(List<string> cards) {
@@ -195,19 +223,62 @@ namespace VideoPoker {
 		}
 
 		private bool ThreeOfAKind(List<string> cards) {
-			
-			
-			return false;
+			bool triple = false;
+
+			//Load digits list from card names
+			List<int> digits = new List<int>();
+			foreach (var card in cards) {
+				int digit = int.Parse(card.Substring(card.Length - 2));
+				digits.Add(digit);
+			}
+
+			for (int first = 0; first < digits.Count; first++) {
+				for (int second = 0; second < digits.Count; second++) {
+					for (int third = 0; third < digits.Count; third++) {
+						//Make sure we're not comparing a card with itself
+						if (first != second && first != third && second != third) {
+							if (digits[first] == digits[second] && digits[second] == digits[third]) {
+								triple = true;
+							}
+						}
+					}
+				}
+			}
+
+			return triple;
 		}
 
 		private bool TwoPair(List<string> cards) {
+			int pairCount = 0;
+
+			//Load digits from card names
+			List<int> digits = new List<int>();
+			foreach (var card in cards) {
+				int digit = int.Parse(card.Substring(card.Length - 2));
+				digits.Add(digit);
+			}
+
+			//Find pairs
+			for (int first = 0; first < digits.Count; first++) {
+				for (int second = 0; second < digits.Count; second++) {
+					if (first != second) {
+						if (digits[first] == digits[second]) {
+							pairCount++;
+							//This counts each pair twice.
+						}
+					}
+				}
+			}
+
+			//Divide our doubled pair count.
+			pairCount /= 2;
 			
-			
-			return false;
+			return pairCount == 2;
 		}
 
 		private bool JacksOrBetter(List<string> cards) {
 			//if contains pair of 11 or higher?
+			//Should this include aces?
 			int jacks = 0;
 			int queens = 0;
 			int kings = 0;
