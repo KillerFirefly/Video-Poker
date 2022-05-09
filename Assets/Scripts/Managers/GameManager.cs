@@ -164,6 +164,7 @@ namespace VideoPoker {
 			currentBalance += winAmount;
 		}
 
+		/// <summary>Depends on higher hands already evaluated.</summary>
 		private bool RoyalFlush(List<string> cards) {
 			if (Flush(cards)) {
 				List<int> digits = ExtractDigits(cards);
@@ -177,10 +178,12 @@ namespace VideoPoker {
 			return false;
 		}
 
+		/// <summary>Depends on higher hands already evaluated.</summary>
 		private bool StraightFlush(List<string> cards) {
 			return Straight(cards) && Flush(cards);
 		}
 
+		/// <summary>Depends on higher hands already evaluated.</summary>
 		private bool FourOfAKind(List<string> cards) {
 			bool four = false;
 
@@ -204,21 +207,25 @@ namespace VideoPoker {
 			return four;
 		}
 
+		/// <summary>Depends on higher hands already evaluated.</summary>
 		private bool FullHouse(List<string> cards) {
+			bool fullHouse = false;
+
 			List<int> digits = ExtractDigits(cards);
 
 			digits.Sort();
 			if (digits[0] == digits[1] && digits[1] == digits[2]
 				&& digits[3] == digits[4]) {
-				return true;
+				fullHouse = true;
 			} else if (digits[0] == digits[1] 
 				&& digits[2] == digits[3] && digits[3] == digits[4]) {
-				return true;
+				fullHouse = true;
 			}
 
-			return false;
+			return fullHouse;
 		}
 
+		/// <summary>Depends on higher hands already evaluated.</summary>
 		private bool Flush(List<string> cards) {
 			bool flush = false;
 
@@ -231,6 +238,7 @@ namespace VideoPoker {
 			return flush;
 		}
 
+		/// <summary>Depends on higher hands already evaluated.</summary>
 		private bool Straight(List<string> cards) {
 			bool straight = false;
 
@@ -253,6 +261,7 @@ namespace VideoPoker {
 			return straight;
 		}
 
+		/// <summary>Depends on higher hands already evaluated.</summary>
 		private bool ThreeOfAKind(List<string> cards) {
 			bool triple = false;
 
@@ -274,6 +283,7 @@ namespace VideoPoker {
 			return triple;
 		}
 
+		/// <summary>Depends on higher hands already evaluated.</summary>
 		private bool TwoPair(List<string> cards) {
 			int pairCount = 0;
 
@@ -296,10 +306,12 @@ namespace VideoPoker {
 			
 			return pairCount == 2;
 		}
-
+		
+		/// <summary>Depends on higher hands already evaluated.</summary>
 		private bool JacksOrBetter(List<string> cards) {
 			//if contains pair of 11 or higher?
 			//Should this include aces?
+			int aces = 0;
 			int jacks = 0;
 			int queens = 0;
 			int kings = 0;
@@ -308,9 +320,10 @@ namespace VideoPoker {
 				if (digit == 11) jacks++;
 				else if (digit == 12) queens++;
 				else if (digit == 13) kings++;
+				else if (digit == 1) aces++;
 			}
 
-			if (jacks == 2 || queens == 2 || kings == 2) {
+			if (jacks == 2 || queens == 2 || kings == 2 || aces == 2) {
 				return true;
 			} else {
 				return false;
